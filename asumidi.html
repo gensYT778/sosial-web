@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fumiya's Social Links</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
+<style>
+body {
+  margin:0;
+  padding:0;
+  font-family: Arial, sans-serif;
+  height:100vh;
+  width:100vw;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  background: linear-gradient(to bottom, #66b2ff, #003366);
+  position: relative;
+}
+
+/* Container */
+.container {
+  position: relative;
+  z-index:10;
+  text-align: center;
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  width: 90vw;
+  max-width: 320px;
+  padding: 20px;
+  opacity:0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s forwards;
+}
+@keyframes fadeInUp { to{opacity:1;transform:translateY(0);} }
+
+.avatar { width:80px; height:80px; border-radius:50%; margin-bottom:15px; object-fit:cover; transition: transform 0.3s ease; }
+.avatar:hover { transform: scale(1.1); }
+
+h1 { font-size:20px; margin:10px 0 5px 0; color:#fff; font-weight:bold; }
+p.bio { font-size:13px; color:#cceeff; margin-bottom:15px; font-weight:normal; }
+
+.social-links a {
+  display:flex; align-items:center; justify-content:center; margin:6px 0; padding:10px; border-radius:8px;
+  color:#fff; font-size:14px; text-decoration:none; transition:all 0.3s ease;
+}
+.social-links a i { margin-right:6px; }
+.social-links a.instagram { background:#E1306C; }
+.social-links a.youtube { background:#FF0000; }
+.social-links a.tiktok { background:#000000; }
+.social-links a:hover { transform:scale(1.05); }
+
+/* Ombak */
+.wave {
+  position: absolute;
+  bottom: 0;
+  width: 200%;
+  height: 50%;
+  left: -50%;
+  background: rgba(0,0,102,0.5);
+  border-radius: 100% 50%;
+  z-index:1;
+  animation: waveMove linear infinite;
+  opacity:0.5;
+}
+.wave:nth-child(1) { animation-duration: 6s; }
+.wave:nth-child(2) { background: rgba(0,0,102,0.4); animation-duration: 8s; bottom:10%; opacity:0.4;}
+.wave:nth-child(3) { background: rgba(0,0,102,0.3); animation-duration: 5s; bottom:5%; opacity:0.3;}
+
+@keyframes waveMove {
+  0% { transform: translateX(0px) translateY(0px); }
+  20% { transform: translateX(30px) translateY(-10px); }
+  40% { transform: translateX(-20px) translateY(15px); }
+  60% { transform: translateX(25px) translateY(-5px); }
+  80% { transform: translateX(-15px) translateY(10px); }
+  100% { transform: translateX(0px) translateY(0px); }
+}
+
+/* Hujan */
+.rain { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:4; }
+.drop { position:absolute; width:2px; height:12px; background:#00aaff; opacity:0.6; border-radius:50%; animation: fall linear infinite; }
+@keyframes fall { 0%{transform:translateY(-20px);opacity:0.6} 50%{opacity:1} 100%{transform:translateY(100vh);opacity:0} }
+
+/* Petir */
+.lightning {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 100vh;
+  background: linear-gradient(to bottom, #fff, rgba(255,255,255,0));
+  opacity: 0;
+  z-index:5;
+  pointer-events: none;
+  box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff;
+  animation: flash 0.2s ease-in-out forwards;
+}
+@keyframes flash {
+  0% { opacity: 1; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Awan besar di langit */
+.cloud {
+  position:absolute;
+  width:350px;
+  height:140px;
+  background: rgba(50,50,50,0.7);
+  border-radius:50%;
+  z-index:6;
+}
+.cloud::before, .cloud::after {
+  content:"";
+  position:absolute;
+  background: rgba(50,50,50,0.7);
+  width:200px;
+  height:140px;
+  border-radius:50%;
+}
+.cloud::before { top:-60px; left:40px; }
+.cloud::after { top:-40px; right:40px; }
+</style>
+</head>
+<body>
+
+<!-- Ombak -->
+<div class="wave"></div>
+<div class="wave"></div>
+<div class="wave"></div>
+
+<!-- Container -->
+<div class="container">
+  <img src="https://i.imgur.com/AVU9mlI.jpeg" alt="Fumiya's Avatar" class="avatar">
+  <h1>Fumiya</h1>
+  <p class="bio">Gamer & Content Creator | Follow aku di sosial media!</p>
+  <div class="social-links">
+    <a href="https://www.instagram.com/fumiya02_/" class="instagram" target="_blank">
+      <i class="fab fa-instagram"></i> Instagram
+    </a>
+    <a href="https://youtube.com/@itsmedyy_02?si=yE1gSkVHstOOlNiG" class="youtube" target="_blank">
+      <i class="fab fa-youtube"></i> YouTube
+    </a>
+    <a href="https://www.tiktok.com/@itsmedyy_02?_t=ZS-8yyceiLxOe8&_r=1" class="tiktok" target="_blank">
+      <i class="fab fa-tiktok"></i> TikTok
+    </a>
+  </div>
+</div>
+
+<!-- Hujan -->
+<div class="rain"></div>
+
+<script>
+// Hujan
+const rain = document.querySelector('.rain');
+for(let i=0;i<50;i++){
+  const drop = document.createElement('div');
+  drop.className='drop';
+  drop.style.left=Math.random()*100+'vw';
+  drop.style.animationDuration=(1+Math.random()*2)+'s';
+  drop.style.animationDelay=Math.random()*2+'s';
+  rain.appendChild(drop);
+}
+
+// Petir
+function createLightning() {
+  const lightning = document.createElement('div');
+  lightning.className = 'lightning';
+  lightning.style.left = Math.random()*100 + 'vw';
+  document.body.appendChild(lightning);
+  setTimeout(() => { lightning.remove(); }, 200);
+  const next = 1000 + Math.random()*7000;
+  setTimeout(createLightning, next);
+}
+createLightning();
+
+// Awan besar, acak posisi dan kecepatan
+function createCloud(){
+  const cloud = document.createElement('div');
+  cloud.className='cloud';
+  // posisi top acak antara -70px sampai -30px supaya hanya setengah terlihat
+  cloud.style.top = (-70 + Math.random()*40) + 'px';
+  cloud.style.left = Math.random() < 0.5 ? '-400px' : '100vw';
+  const direction = cloud.style.left === '-400px' ? 'ltr' : 'rtl';
+  document.body.appendChild(cloud);
+  const duration = 20 + Math.random()*20; // kecepatan berbeda
+  cloud.animate([
+    { transform: 'translateX(0)' },
+    { transform: direction==='ltr' ? `translateX(${window.innerWidth + 500}px)` : `translateX(-${window.innerWidth + 500}px)` }
+  ], { duration: duration*1000, iterations:Infinity, easing:'linear' });
+}
+
+// Banyak awan, interval acak supaya tidak bergerak bersamaan
+for(let i=0;i<12;i++){
+  setTimeout(createCloud, Math.random()*5000);
+}
+</script>
+
+</body>
+</html>
