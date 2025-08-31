@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mizanagi - Cyberpunk Neon</title>
+  <script src="https://cdn.jsdelivr.net/npm/react@18.0.0/umd/react.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.0.0/umd/react-dom.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0d0d0d, #1a001a);
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    /* Neon Container Breathing */
+    .container-glow {
+      background: rgba(0, 0, 0, 0.65);
+      border: 2px solid #ff00de;
+      border-radius: 24px;
+      box-shadow: 0 0 30px #ff00de80, 0 0 60px #ff00de40;
+      backdrop-filter: blur(10px);
+      animation: breathing 4s ease-in-out infinite;
+    }
+    @keyframes breathing {
+      0%, 100% { box-shadow: 0 0 25px #ff00de80, 0 0 50px #ff00de40; }
+      50% { box-shadow: 0 0 50px #ff00de, 0 0 100px #ff00de70; }
+    }
+
+    /* Neon Profile */
+    .profile-image {
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #ff00de;
+      box-shadow: 0 0 20px #ff00de, 0 0 40px #ff00de70;
+      animation: pulse 3s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    /* Social Button */
+    .social-button {
+      position: relative;
+      overflow: hidden;
+      background: rgba(0,0,0,0.7);
+      border: 1px solid #ff00de60;
+      transition: all .3s ease;
+    }
+    .social-button:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 0 15px #ff00de80, 0 0 30px #ff00de50;
+    }
+    .social-button::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 0, 222, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width .6s, height .6s;
+    }
+    .social-button:active::after {
+      width: 300px;
+      height: 300px;
+    }
+
+    /* Produk Card Shine */
+    .product-card {
+      position: relative;
+      overflow: hidden;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid #ff00de60;
+      transition: all .3s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 0 20px #ff00de80;
+    }
+    .product-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: -75%;
+      width: 50%; height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+      transform: skewX(-25deg);
+    }
+    .product-card:hover::before {
+      animation: shine 1s forwards;
+    }
+    @keyframes shine {
+      100% { left: 125%; }
+    }
+
+    /* Glitch Effect */
+    .glitch {
+      position: relative;
+      color: #fff;
+      font-weight: 700;
+      text-shadow: 0 0 5px #ff00de, 0 0 10px #ff00de;
+    }
+    .glitch::before, .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      overflow: hidden;
+      clip: rect(0, 900px, 0, 0);
+    }
+    .glitch::before {
+      left: 2px;
+      text-shadow: -2px 0 #00fff7;
+      animation: glitch 2s infinite linear alternate-reverse;
+    }
+    .glitch::after {
+      left: -2px;
+      text-shadow: -2px 0 #ff00de;
+      animation: glitch 1.5s infinite linear alternate-reverse;
+    }
+    @keyframes glitch {
+      0% { clip: rect(42px, 9999px, 44px, 0); }
+      10% { clip: rect(12px, 9999px, 16px, 0); }
+      20% { clip: rect(72px, 9999px, 80px, 0); }
+      30% { clip: rect(32px, 9999px, 34px, 0); }
+      40% { clip: rect(52px, 9999px, 54px, 0); }
+      50% { clip: rect(22px, 9999px, 24px, 0); }
+      60% { clip: rect(62px, 9999px, 64px, 0); }
+      70% { clip: rect(82px, 9999px, 84px, 0); }
+      80% { clip: rect(92px, 9999px, 94px, 0); }
+      90% { clip: rect(102px, 9999px, 104px, 0); }
+      100% { clip: rect(12px, 9999px, 14px, 0); }
+    }
+
+    /* Floating Particles */
+    .floating-particles {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .particle {
+      position: absolute;
+      background: rgba(255,0,222,0.6);
+      border-radius: 50%;
+      animation: float 6s infinite linear;
+    }
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="floating-particles" id="particles"></div>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const SocialButton = ({ icon, label, url, onClick }) => (
+      <button
+        onClick={onClick || (() => window.open(url, '_blank'))}
+        className="social-button w-full py-4 px-6 rounded-xl flex items-center justify-center space-x-4 text-white text-lg font-semibold"
+      >
+        <i className={`${icon} text-2xl`}></i>
+        <span>{label}</span>
+      </button>
+    );
+
+    const ProductCard = ({ title, features }) => (
+      <div className="product-card rounded-xl p-4 text-white">
+        <h3 className="text-xl font-bold mb-3">{title}</h3>
+        <div className="space-y-2">
+          {features.map((f, i) => (
+            <div key={i} className="flex justify-between">
+              <span>{f.name}</span>
+              <span className="text-pink-400 font-semibold">Rp{f.price.toLocaleString()}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+
+    const generateParticles = () => {
+      const container = document.getElementById("particles");
+      for (let i = 0; i < 25; i++) {
+        const p = document.createElement("div");
+        p.className = "particle";
+        const size = Math.random() * 8 + 4;
+        p.style.width = `${size}px`;
+        p.style.height = `${size}px`;
+        p.style.left = `${Math.random() * 100}%`;
+        p.style.animationDuration = `${Math.random() * 10 + 5}s`;
+        p.style.animationDelay = `${Math.random() * 5}s`;
+        container.appendChild(p);
+      }
+    };
+
+    const App = () => {
+      const handlePhoneClick = () => {
+        const phoneNumber = "6282137701594";
+        window.open(`https://wa.me/${phoneNumber}`, '_blank');
+      };
+
+      const products = [
+        {
+          title: "MORE COSMETIC",
+          features: [
+            { name: "PNG", price: 8000 },
+            { name: "3D", price: 10000 }
+          ]
+        }
+      ];
+
+      React.useEffect(() => { generateParticles(); }, []);
+
+      return (
+        <div className="flex flex-col items-center justify-center min-h-screen p-4">
+          <div className="container-glow p-8 w-full max-w-md">
+            
+            {/* Profile */}
+            <div className="text-center mb-8">
+              <img src="https://i.imgur.com/hRCLNmQ.jpeg"
+                   alt="Profile"
+                   className="w-32 h-32 mx-auto profile-image"/>
+              <h1 className="glitch text-4xl mt-4" data-text="Mizanagi">Mizanagi</h1>
+            </div>
+
+            {/* Social Buttons */}
+            <div className="space-y-4">
+              <SocialButton icon="fab fa-whatsapp" label="WhatsApp Channel" url="https://whatsapp.com/channel/0029Vb2V1i57dmeTEIvVzh2n"/>
+              <SocialButton icon="fab fa-tiktok" label="TikTok" url="https://www.tiktok.com/@mizanagii_"/>
+              <SocialButton icon="fas fa-phone-alt" label="Hubungi Via WhatsApp" onClick={handlePhoneClick}/>
+            </div>
+
+            {/* Produk */}
+            <div className="mt-8 space-y-4">
+              <h2 className="glitch text-2xl text-center mb-4" data-text="Produk Unggulan">Produk Unggulan</h2>
+              {products.map((p, i) => (
+                <ProductCard key={i} title={p.title} features={p.features}/>
+              ))}
+            </div>
+
+            {/* Footer */}
+            <div className="mt-10 text-center text-sm text-gray-400">
+              <p>© 2025 Mizanagi. Hak Cipta Dilindungi.</p>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    ReactDOM.render(<App />, document.getElementById("root"));
+  </script>
+</body>
+</html>
