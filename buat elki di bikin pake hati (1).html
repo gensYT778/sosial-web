@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LOVE U SSAAYYANGG</title>
+<style>
+:root{
+  --bg1:#0b1b3a;
+  --bg2:#000;
+  --glass-border: rgba(255,255,255,0.08);
+  --muted: rgba(255,255,255,0.7);
+  --radius:18px;
+}
+html,body{
+  min-height:100vh;
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial
+}
+body{
+  background: linear-gradient(180deg,var(--bg1) 0%, #071428 40%, var(--bg2) 100%);
+  color:#eaf6ff;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:40px;
+}
+#sky{position:fixed;inset:0;z-index:0}
+
+.container{position:relative;z-index:5;max-width:920px;width:100%;display:grid;grid-template-columns:1fr 360px;gap:28px;align-items:start}
+
+.card{
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+  border:1px solid var(--glass-border);
+  backdrop-filter: blur(6px) saturate(120%);
+  padding:28px;border-radius:var(--radius);box-shadow: 0 10px 30px rgba(2,8,23,0.6);
+  animation:floaty 6s ease-in-out infinite;
+}
+.card:hover{transform:translateY(-2px)}
+
+h1{margin:0 0 12px 0;font-size:20px;letter-spacing:0.2px}
+p{margin:8px 0 12px 0;line-height:1.6;color:var(--muted);font-size:16px;white-space:pre-line}
+
+.meta{display:flex;gap:10px;align-items:center;margin-top:10px}
+.badge{padding:8px 12px;border-radius:999px;background:linear-gradient(90deg, rgba(136,199,255,0.12), rgba(136,199,255,0.06));border:1px solid rgba(136,199,255,0.12);font-size:13px}
+
+.panel{display:flex;flex-direction:column;gap:18px;align-items:center;justify-content:center}
+.moon-wrap{width:260px;height:260px;background:radial-gradient(circle at 30% 25%, #fff3 0%, #ffffff08 10%, transparent 25%), linear-gradient(180deg,#ffffff0a,#0000);border-radius:50%;display:grid;place-items:center;box-shadow:0 10px 40px rgba(0,0,0,0.6), inset 0 -6px 18px rgba(0,0,0,0.25);position:relative}
+.moon{width:180px;height:180px;border-radius:50%;background:linear-gradient(135deg,#f8f7ec,#dbe9ff);box-shadow:0 12px 30px rgba(6,12,22,0.45), inset -10px -6px 20px rgba(0,0,0,0.06)}
+.crater{position:absolute;border-radius:50%;background:rgba(0,0,0,0.06);box-shadow:inset -6px -6px 10px rgba(255,255,255,0.02)}
+.crater.c1{width:30px;height:30px;left:52%;top:46%;}
+.crater.c2{width:18px;height:18px;left:62%;top:60%;}
+.crater.c3{width:22px;height:22px;left:40%;top:60%;}
+
+.btn{padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));cursor:pointer;font-weight:600;color:#eaf6ff}
+.btn:active{transform:translateY(1px)}
+.whatsapp{background:linear-gradient(90deg,#1bd76b,#14b45b);color:#02140a;border:0}
+
+footer{position:fixed;left:18px;bottom:18px;font-size:13px;color:rgba(255,255,255,0.55)}
+
+@media (max-width:900px){
+  .container{grid-template-columns:1fr;}
+  .panel{order:-1}
+}
+
+@keyframes floaty{0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}}
+
+.shoot{position:absolute;width:3px;height:120px;background:linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,255,255,0));transform:rotate(-20deg);border-radius:2px;filter:blur(.6px)}
+
+.sparkle{position:relative}
+.sparkle:before{content:"";position:absolute;width:10px;height:10px;background:radial-gradient(circle,#fff,transparent);border-radius:50%;left:-18px;top:-6px;opacity:.85;transform:scale(.8);animation:twinkle 3s infinite}
+@keyframes twinkle{0%,90%{opacity:.2}45%{opacity:1;transform:scale(1.1)}}
+</style>
+</head>
+<body>
+<canvas id="sky"></canvas>
+<div class="container" role="main">
+  <article class="card" aria-labelledby="judul">
+    <h1 id="judul" class="sparkle">Untuk elkia</h1>
+    <!-- text animasi mengetik -->
+    <p id="message"></p>
+    <div class="meta">
+      <div class="badge">Semangat ya sayangku ini aku bikin pake hati 🩷🩷🩷</div>
+      <div style="margin-left:auto;display:flex;gap:10px">
+        <button class="btn" id="readBtn" title="Dengarkan bacaan">Baca</button>
+        <button class="btn" id="stopBtn" title="Hentikan bacaan">Stop</button>
+      </div>
+    </div>
+    <div style="margin-top:18px;display:flex;gap:12px;align-items:center">
+      <a id="waLink" class="btn whatsapp" href="#" target="_blank" rel="noopener">Balas via WhatsApp</a>
+      <button class="btn" id="copyBtn">Salin Pesan</button>
+    </div>
+  </article>
+
+  <aside class="panel" aria-label="Dekorasi bulan dan bintang">
+    <div class="moon-wrap" aria-hidden="true">
+      <div class="moon"></div>
+      <div class="crater c1"></div>
+      <div class="crater c2"></div>
+      <div class="crater c3"></div>
+    </div>
+    <div style="text-align:center;color:rgba(255,255,255,0.75)">
+      <div style="font-weight:700;font-size:15px">Surat dari gens</div>
+      <div style="font-size:13px;margin-top:6px;color:rgba(255,255,255,0.6)">Dari gens untuk elkia</div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn" id="wishesBtn">Kirim Harapan</button>
+    </div>
+  </aside>
+</div>
+
+<footer>©RavenStore • 2020-2025</footer>
+
+<script>
+/* starfield */
+const canvas = document.getElementById('sky');
+const ctx = canvas.getContext('2d');
+let W = canvas.width = innerWidth;
+let H = canvas.height = innerHeight;
+
+window.addEventListener('resize', ()=>{W=canvas.width=innerWidth;H=canvas.height=innerHeight;initStars()});
+
+const stars = [];
+function rand(min,max){return Math.random()*(max-min)+min}
+function initStars(){
+  stars.length=0;
+  const STAR_COUNT = Math.floor((W*H)/15000)+100;
+  for(let i=0;i<STAR_COUNT;i++){
+    stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.6+0.2,alpha:Math.random()*0.9+0.1,dx:Math.random()*0.2-0.1})
+  }
+}
+initStars();
+
+const shooting = [];
+function makeShooting(){
+  shooting.push({x:Math.random()*W, y:Math.random()*H*0.6, len:rand(80,220), speed:rand(8,18), angle:rand(-0.5,-0.2), life:0, maxLife:rand(60,120)})
+  if(shooting.length>6) shooting.shift();
+}
+setInterval(makeShooting, 2500);
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  const g = ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'rgba(10,22,48,0.12)');
+  g.addColorStop(0.5,'rgba(6,12,28,0.14)');
+  g.addColorStop(1,'rgba(0,0,0,0.35)');
+  ctx.fillStyle = g;ctx.fillRect(0,0,W,H);
+
+  for(let s of stars){
+    s.x += s.dx*0.15;
+    if(s.x>W) s.x=0;
+    ctx.globalAlpha = s.alpha;
+    ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle='#ffffff';ctx.fill();
+  }
+
+  for(let i=0;i<shooting.length;i++){
+    const st=shooting[i];st.life++;
+    const progress = st.life/st.maxLife;
+    const ox = st.x + Math.cos(st.angle)*st.speed*st.life;
+    const oy = st.y + Math.sin(st.angle)*st.speed*st.life;
+    const tx = ox + Math.cos(st.angle)*st.len;
+    const ty = oy + Math.sin(st.angle)*st.len;
+    const grad = ctx.createLinearGradient(ox,oy,tx,ty);
+    grad.addColorStop(0,'rgba(255,255,255,'+(1-progress)+')');
+    grad.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.strokeStyle = grad;ctx.lineWidth = 2;ctx.beginPath();ctx.moveTo(ox,oy);ctx.lineTo(tx,ty);ctx.stroke();
+  }
+
+  ctx.globalAlpha=1;
+  requestAnimationFrame(draw);
+}
+draw();
+
+/* animasi mengetik */
+const fullText = `Sayang, aku cuma mau bilang kalau aku selalu bangga sama kamu ❤️. Aku tahu kamu lagi berjuang dan kadang capek, tapi aku percaya kamu itu kuat dan hebat. Jangan pernah ragu sama dirimu sendiri ya, karena aku pun percaya sama kemampuan kamu.
+
+Kalau lagi ngerasa lelah, ingat kalau aku di sini buat nemenin kamu. Kamu nggak harus sempurna kok, yang penting kamu sudah berusaha. Setiap langkah kecil yang kamu ambil itu berarti banget.
+
+Semangat terus ya sayangku, kita jalan bareng-bareng. Kamu nggak sendiri, ada aku yang selalu dukung dan sayang sama kamu. Aku yakin semua yang kamu perjuangkan akan ada hasilnya. Kamu bisa! 💕✨`;
+
+const messageEl = document.getElementById('message');
+let i=0;
+function typeWriter(){
+  if(i<fullText.length){
+    messageEl.textContent += fullText.charAt(i);
+    i++;
+    setTimeout(typeWriter,30); // kecepatan mengetik
+  }
+}
+typeWriter();
+
+/* UI: WA, copy, voice */
+const readBtn = document.getElementById('readBtn');
+const stopBtn = document.getElementById('stopBtn');
+const copyBtn = document.getElementById('copyBtn');
+const waLink = document.getElementById('waLink');
+
+const rawNumber = '088289316069';
+const waNumber = rawNumber.replace(/^0+/,'').replace(/^/, '62');
+const prefill = encodeURIComponent('Hai, aku terima suratmu: "'+fullText.split("\n")[0]+'..."');
+waLink.href = 'https://wa.me/' + waNumber + '?text=' + prefill;
+waLink.title = 'Balas ke WhatsApp: ' + rawNumber;
+
+let utter;
+function speak(){
+  if(!('speechSynthesis' in window)){
+    alert('Perangkatmu tidak mendukung fitur baca suara.');return;
+  }
+  window.speechSynthesis.cancel();
+  utter = new SpeechSynthesisUtterance(fullText.replace(/\n/g,' '));
+  utter.rate = 0.95;utter.pitch = 1;
+  const voices = speechSynthesis.getVoices();
+  if(voices && voices.length>0){utter.voice = voices.find(v=>/ind|id/i.test(v.lang))||voices[0]}
+  window.speechSynthesis.speak(utter);
+}
+function stopSpeak(){if(window.speechSynthesis)window.speechSynthesis.cancel();utter=null}
+
+readBtn.addEventListener('click',speak);
+stopBtn.addEventListener('click',stopSpeak);
+
+copyBtn.addEventListener('click', async ()=>{
+  try{
+    await navigator.clipboard.writeText(fullText.trim());
+    copyBtn.innerText = 'Tersalin!';
+    setTimeout(()=>copyBtn.innerText='Salin Pesan',1600);
+  }catch(e){
+    alert('Maaf ya sepertinya ada yang error hhe');
+  }
+});
+
+document.getElementById('wishesBtn').addEventListener('click', ()=>{
+  const wish = encodeURIComponent('Semoga harimu penuh kekuatan dan kemudahan. 🌠');
+  window.open('https://wa.me/' + waNumber + '?text=' + wish, '_blank');
+});
+</script>
+</body>
+</html>
